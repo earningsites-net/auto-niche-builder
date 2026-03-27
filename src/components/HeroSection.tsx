@@ -1,168 +1,156 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef } from "react";
-
-const FuturisticGrid = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animationId: number;
-    let time = 0;
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2;
-      canvas.height = canvas.offsetHeight * 2;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    // Create a grid of nodes
-    const nodes: { x: number; y: number; baseX: number; baseY: number; phase: number; speed: number }[] = [];
-
-    const initNodes = () => {
-      nodes.length = 0;
-      const spacing = 60;
-      const cols = Math.ceil(canvas.width / spacing) + 1;
-      const rows = Math.ceil(canvas.height / spacing) + 1;
-      for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-          nodes.push({
-            x: i * spacing,
-            y: j * spacing,
-            baseX: i * spacing,
-            baseY: j * spacing,
-            phase: Math.random() * Math.PI * 2,
-            speed: 0.3 + Math.random() * 0.7,
-          });
-        }
-      }
-    };
-    initNodes();
-
-    const draw = () => {
-      time += 0.008;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Update node positions with organic floating
-      for (const node of nodes) {
-        node.x = node.baseX + Math.sin(time * node.speed + node.phase) * 12;
-        node.y = node.baseY + Math.cos(time * node.speed * 0.7 + node.phase) * 8;
-      }
-
-      // Draw connections between nearby nodes
-      const maxDist = 90;
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < maxDist) {
-            const alpha = (1 - dist / maxDist) * 0.12;
-            // Gradient line from blue to purple
-            const grad = ctx.createLinearGradient(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
-            grad.addColorStop(0, `rgba(43, 102, 255, ${alpha})`);
-            grad.addColorStop(1, `rgba(139, 60, 242, ${alpha})`);
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-      }
-
-      // Draw flowing pulse waves
-      const pulseCount = 3;
-      for (let p = 0; p < pulseCount; p++) {
-        const pulseTime = (time * 0.4 + p * 2.1) % 6;
-        const pulseX = (pulseTime / 6) * canvas.width;
-        const pulseRadius = 200;
-
-        for (const node of nodes) {
-          const dx = node.x - pulseX;
-          const dy = node.y - canvas.height * 0.5;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < pulseRadius) {
-            const intensity = (1 - dist / pulseRadius) * 0.3;
-            const wave = Math.sin(dist * 0.03 - time * 3) * 0.5 + 0.5;
-            const alpha = intensity * wave;
-            const radius = 2 + intensity * 3;
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(99, 102, 241, ${alpha})`;
-            ctx.fill();
-          }
-        }
-      }
-
-      // Draw nodes as small dots
-      for (const node of nodes) {
-        const centerDist = Math.sqrt(
-          Math.pow((node.x - canvas.width * 0.5) / canvas.width, 2) +
-          Math.pow((node.y - canvas.height * 0.5) / canvas.height, 2)
-        );
-        const fadeFromCenter = Math.max(0, 1 - centerDist * 1.5);
-        const pulse = Math.sin(time * 2 + node.phase) * 0.3 + 0.7;
-        const alpha = 0.08 + fadeFromCenter * 0.15 * pulse;
-        const r = 1.5 + fadeFromCenter * 1.5;
-
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(43, 102, 255, ${alpha})`;
-        ctx.fill();
-      }
-
-      // Draw hex-style accent shapes
-      const hexCount = 5;
-      for (let h = 0; h < hexCount; h++) {
-        const hx = canvas.width * (0.15 + h * 0.18);
-        const hy = canvas.height * (0.3 + Math.sin(time * 0.5 + h * 1.2) * 0.2);
-        const size = 30 + Math.sin(time + h) * 10;
-        const alpha = 0.03 + Math.sin(time * 0.8 + h * 0.7) * 0.02;
-
-        ctx.beginPath();
-        for (let s = 0; s < 6; s++) {
-          const angle = (Math.PI / 3) * s - Math.PI / 6 + time * 0.1;
-          const px = hx + Math.cos(angle) * size;
-          const py = hy + Math.sin(angle) * size;
-          if (s === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.closePath();
-        ctx.strokeStyle = `rgba(139, 60, 242, ${alpha})`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      }
-
-      animationId = requestAnimationFrame(draw);
-    };
-
-    draw();
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-    />
-  );
-};
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-muted/30">
-      <FuturisticGrid />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-muted/20">
+      {/* Animated geometric background */}
+      <div className="absolute inset-0">
+        {/* Base gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.04] via-transparent to-accent/[0.04]" />
+
+        {/* Animated floating orbs */}
+        <motion.div
+          className="absolute w-[600px] h-[600px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(43,102,255,0.08) 0%, transparent 70%)",
+            top: "10%",
+            left: "5%",
+          }}
+          animate={{ x: [0, 40, 0], y: [0, -30, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute w-[500px] h-[500px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(139,60,242,0.07) 0%, transparent 70%)",
+            bottom: "5%",
+            right: "0%",
+          }}
+          animate={{ x: [0, -35, 0], y: [0, 25, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute w-[350px] h-[350px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(43,102,255,0.06) 0%, transparent 70%)",
+            top: "50%",
+            right: "25%",
+          }}
+          animate={{ x: [0, 25, -15, 0], y: [0, -20, 10, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Animated grid lines */}
+        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#2b66ff" stopOpacity="0.06" />
+              <stop offset="100%" stopColor="#8b3cf2" stopOpacity="0.06" />
+            </linearGradient>
+            <linearGradient id="pulseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#2b66ff" stopOpacity="0" />
+              <stop offset="50%" stopColor="#2b66ff" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#8b3cf2" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          {/* Horizontal lines */}
+          {Array.from({ length: 8 }).map((_, i) => (
+            <line
+              key={`h-${i}`}
+              x1="0"
+              y1={`${12.5 * (i + 1)}%`}
+              x2="100%"
+              y2={`${12.5 * (i + 1)}%`}
+              stroke="url(#lineGrad)"
+              strokeWidth="1"
+            />
+          ))}
+          {/* Vertical lines */}
+          {Array.from({ length: 12 }).map((_, i) => (
+            <line
+              key={`v-${i}`}
+              x1={`${8.33 * (i + 1)}%`}
+              y1="0"
+              x2={`${8.33 * (i + 1)}%`}
+              y2="100%"
+              stroke="url(#lineGrad)"
+              strokeWidth="1"
+            />
+          ))}
+        </svg>
+
+        {/* Animated pulse lines traveling across the grid */}
+        {[0, 1, 2].map((i) => (
+          <motion.div
+            key={`pulse-h-${i}`}
+            className="absolute left-0 h-[2px] w-[200px]"
+            style={{
+              background: "linear-gradient(90deg, transparent, rgba(43,102,255,0.25), rgba(139,60,242,0.2), transparent)",
+              top: `${25 + i * 25}%`,
+            }}
+            animate={{ x: ["-200px", "110vw"] }}
+            transition={{
+              duration: 6 + i * 2,
+              repeat: Infinity,
+              delay: i * 2.5,
+              ease: "linear",
+            }}
+          />
+        ))}
+        {[0, 1].map((i) => (
+          <motion.div
+            key={`pulse-v-${i}`}
+            className="absolute top-0 w-[2px] h-[150px]"
+            style={{
+              background: "linear-gradient(180deg, transparent, rgba(139,60,242,0.2), rgba(43,102,255,0.25), transparent)",
+              left: `${33 + i * 33}%`,
+            }}
+            animate={{ y: ["-150px", "110vh"] }}
+            transition={{
+              duration: 8 + i * 3,
+              repeat: Infinity,
+              delay: i * 3,
+              ease: "linear",
+            }}
+          />
+        ))}
+
+        {/* Floating geometric shapes */}
+        <motion.div
+          className="absolute w-20 h-20 border border-primary/10 rounded-xl"
+          style={{ top: "20%", left: "15%" }}
+          animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute w-14 h-14 border border-accent/10 rounded-lg"
+          style={{ top: "60%", right: "20%" }}
+          animate={{ rotate: -360, scale: [1, 1.15, 1] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute w-24 h-24 border border-primary/[0.07]"
+          style={{ bottom: "25%", left: "30%", borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%" }}
+          animate={{ rotate: 180, borderRadius: ["30% 70% 70% 30% / 30% 30% 70% 70%", "70% 30% 30% 70% / 70% 70% 30% 30%", "30% 70% 70% 30% / 30% 30% 70% 70%"] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute w-3 h-3 rounded-full bg-primary/20"
+          style={{ top: "35%", right: "35%" }}
+          animate={{ scale: [1, 1.8, 1], opacity: [0.2, 0.5, 0.2] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute w-2 h-2 rounded-full bg-accent/20"
+          style={{ top: "70%", left: "45%" }}
+          animate={{ scale: [1, 2, 1], opacity: [0.15, 0.4, 0.15] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+        />
+      </div>
+
+      {/* Fade to background at bottom */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
 
       <div className="relative z-10 container mx-auto px-6 text-center">
         <motion.div
