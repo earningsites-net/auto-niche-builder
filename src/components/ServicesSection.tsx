@@ -4,24 +4,24 @@ import { Globe, ShoppingCart, Smartphone } from "lucide-react";
 const services = [
   {
     icon: Globe,
-    title: "Siti Web",
-    description: "Landing page, siti vetrina e portali su misura. Design moderno e performance ottimali.",
+    title: "Websites",
+    description: "Landing pages, showcase sites, and custom portals. Modern design with optimal performance.",
   },
   {
     icon: ShoppingCart,
     title: "E-Commerce",
-    description: "Negozi online completi con gestione prodotti, pagamenti sicuri e integrazioni avanzate.",
+    description: "Complete online stores with product management, secure payments, and advanced integrations.",
   },
   {
     icon: Smartphone,
-    title: "Applicazioni",
-    description: "Web app e soluzioni digitali personalizzate per automatizzare e far crescere il tuo business.",
+    title: "Applications",
+    description: "Web apps and custom digital solutions to automate and grow your business.",
   },
 ];
 
 const ServicesSection = () => {
   return (
-    <section id="servizi" className="py-28 relative">
+    <section id="services" className="py-28 relative">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -30,9 +30,9 @@ const ServicesSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-primary text-sm font-medium tracking-[0.2em] uppercase mb-3">Cosa facciamo</p>
-          <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>
-            I nostri servizi
+          <p className="text-primary text-sm font-medium tracking-[0.2em] uppercase mb-3">What We Do</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
+            Our Services
           </h2>
         </motion.div>
 
@@ -44,12 +44,12 @@ const ServicesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="glass rounded-2xl p-8 hover:glow transition-shadow duration-500 group"
+              className="bg-card rounded-2xl p-8 border border-border/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-500 group"
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/15 transition-colors">
                 <service.icon className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: "var(--font-heading)" }}>
+              <h3 className="text-xl font-semibold mb-3 text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
                 {service.title}
               </h3>
               <p className="text-muted-foreground leading-relaxed text-sm">
