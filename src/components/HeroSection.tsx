@@ -3,149 +3,179 @@ import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-muted/20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: "hsl(228 30% 96%)" }}>
       {/* Animated geometric background */}
       <div className="absolute inset-0">
-        {/* Base gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.04] via-transparent to-accent/[0.04]" />
+        {/* Large animated gradient orbs */}
+        <motion.div
+          className="absolute w-[700px] h-[700px] rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(circle, rgba(43,102,255,0.22) 0%, transparent 70%)",
+            top: "-5%",
+            left: "-5%",
+          }}
+          animate={{ x: [0, 60, 0], y: [0, -40, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute w-[600px] h-[600px] rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(circle, rgba(139,60,242,0.18) 0%, transparent 70%)",
+            bottom: "-10%",
+            right: "-10%",
+          }}
+          animate={{ x: [0, -50, 0], y: [0, 35, 0], scale: [1, 1.2, 1] }}
+          transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute w-[450px] h-[450px] rounded-full blur-2xl"
+          style={{
+            background: "radial-gradient(circle, rgba(43,102,255,0.14) 0%, transparent 65%)",
+            top: "40%",
+            right: "15%",
+          }}
+          animate={{ x: [0, 30, -20, 0], y: [0, -25, 15, 0] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute w-[300px] h-[300px] rounded-full blur-2xl"
+          style={{
+            background: "radial-gradient(circle, rgba(139,60,242,0.12) 0%, transparent 65%)",
+            top: "15%",
+            right: "30%",
+          }}
+          animate={{ x: [0, -20, 30, 0], y: [0, 30, -10, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
 
-        {/* Animated floating orbs */}
-        <motion.div
-          className="absolute w-[600px] h-[600px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(43,102,255,0.08) 0%, transparent 70%)",
-            top: "10%",
-            left: "5%",
-          }}
-          animate={{ x: [0, 40, 0], y: [0, -30, 0], scale: [1, 1.1, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute w-[500px] h-[500px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(139,60,242,0.07) 0%, transparent 70%)",
-            bottom: "5%",
-            right: "0%",
-          }}
-          animate={{ x: [0, -35, 0], y: [0, 25, 0], scale: [1, 1.15, 1] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute w-[350px] h-[350px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(43,102,255,0.06) 0%, transparent 70%)",
-            top: "50%",
-            right: "25%",
-          }}
-          animate={{ x: [0, 25, -15, 0], y: [0, -20, 10, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        {/* Animated grid lines */}
+        {/* Grid with visible lines */}
         <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#2b66ff" stopOpacity="0.06" />
-              <stop offset="100%" stopColor="#8b3cf2" stopOpacity="0.06" />
-            </linearGradient>
-            <linearGradient id="pulseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="gridH" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#2b66ff" stopOpacity="0" />
-              <stop offset="50%" stopColor="#2b66ff" stopOpacity="0.3" />
+              <stop offset="20%" stopColor="#2b66ff" stopOpacity="0.12" />
+              <stop offset="80%" stopColor="#8b3cf2" stopOpacity="0.12" />
+              <stop offset="100%" stopColor="#8b3cf2" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="gridV" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#2b66ff" stopOpacity="0" />
+              <stop offset="20%" stopColor="#2b66ff" stopOpacity="0.1" />
+              <stop offset="80%" stopColor="#8b3cf2" stopOpacity="0.1" />
               <stop offset="100%" stopColor="#8b3cf2" stopOpacity="0" />
             </linearGradient>
           </defs>
-          {/* Horizontal lines */}
-          {Array.from({ length: 8 }).map((_, i) => (
-            <line
-              key={`h-${i}`}
-              x1="0"
-              y1={`${12.5 * (i + 1)}%`}
-              x2="100%"
-              y2={`${12.5 * (i + 1)}%`}
-              stroke="url(#lineGrad)"
-              strokeWidth="1"
-            />
+          {Array.from({ length: 10 }).map((_, i) => (
+            <line key={`h-${i}`} x1="0" y1={`${10 * (i + 1)}%`} x2="100%" y2={`${10 * (i + 1)}%`} stroke="url(#gridH)" strokeWidth="1" />
           ))}
-          {/* Vertical lines */}
-          {Array.from({ length: 12 }).map((_, i) => (
-            <line
-              key={`v-${i}`}
-              x1={`${8.33 * (i + 1)}%`}
-              y1="0"
-              x2={`${8.33 * (i + 1)}%`}
-              y2="100%"
-              stroke="url(#lineGrad)"
-              strokeWidth="1"
-            />
+          {Array.from({ length: 14 }).map((_, i) => (
+            <line key={`v-${i}`} x1={`${7.14 * (i + 1)}%`} y1="0" x2={`${7.14 * (i + 1)}%`} y2="100%" stroke="url(#gridV)" strokeWidth="1" />
           ))}
         </svg>
 
-        {/* Animated pulse lines traveling across the grid */}
-        {[0, 1, 2].map((i) => (
+        {/* Bright pulse beams traveling the grid */}
+        {[0, 1, 2, 3].map((i) => (
           <motion.div
             key={`pulse-h-${i}`}
-            className="absolute left-0 h-[2px] w-[200px]"
+            className="absolute left-0 h-[2px]"
             style={{
-              background: "linear-gradient(90deg, transparent, rgba(43,102,255,0.25), rgba(139,60,242,0.2), transparent)",
-              top: `${25 + i * 25}%`,
+              width: "300px",
+              background: "linear-gradient(90deg, transparent, rgba(43,102,255,0.6), rgba(139,60,242,0.5), transparent)",
+              top: `${20 + i * 20}%`,
+              filter: "blur(0.5px)",
             }}
-            animate={{ x: ["-200px", "110vw"] }}
+            animate={{ x: ["-300px", "120vw"] }}
             transition={{
-              duration: 6 + i * 2,
+              duration: 5 + i * 1.5,
               repeat: Infinity,
-              delay: i * 2.5,
+              delay: i * 1.8,
               ease: "linear",
             }}
           />
         ))}
-        {[0, 1].map((i) => (
+        {[0, 1, 2].map((i) => (
           <motion.div
             key={`pulse-v-${i}`}
-            className="absolute top-0 w-[2px] h-[150px]"
+            className="absolute top-0"
             style={{
-              background: "linear-gradient(180deg, transparent, rgba(139,60,242,0.2), rgba(43,102,255,0.25), transparent)",
-              left: `${33 + i * 33}%`,
+              width: "2px",
+              height: "200px",
+              background: "linear-gradient(180deg, transparent, rgba(139,60,242,0.5), rgba(43,102,255,0.6), transparent)",
+              left: `${25 + i * 25}%`,
+              filter: "blur(0.5px)",
             }}
-            animate={{ y: ["-150px", "110vh"] }}
+            animate={{ y: ["-200px", "120vh"] }}
             transition={{
-              duration: 8 + i * 3,
+              duration: 6 + i * 2,
               repeat: Infinity,
-              delay: i * 3,
+              delay: i * 2,
               ease: "linear",
             }}
           />
         ))}
 
-        {/* Floating geometric shapes */}
+        {/* Intersection glow dots at grid crossings */}
+        {[
+          { top: "30%", left: "28%" },
+          { top: "50%", left: "50%" },
+          { top: "40%", left: "71%" },
+          { top: "60%", left: "35%" },
+          { top: "20%", left: "57%" },
+          { top: "70%", left: "64%" },
+        ].map((pos, i) => (
+          <motion.div
+            key={`dot-${i}`}
+            className="absolute w-2 h-2 rounded-full"
+            style={{
+              ...pos,
+              background: i % 2 === 0 ? "rgba(43,102,255,0.5)" : "rgba(139,60,242,0.5)",
+              boxShadow: i % 2 === 0
+                ? "0 0 12px rgba(43,102,255,0.4), 0 0 30px rgba(43,102,255,0.15)"
+                : "0 0 12px rgba(139,60,242,0.4), 0 0 30px rgba(139,60,242,0.15)",
+            }}
+            animate={{
+              scale: [1, 1.8, 1],
+              opacity: [0.4, 1, 0.4],
+            }}
+            transition={{
+              duration: 3 + i * 0.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.8,
+            }}
+          />
+        ))}
+
+        {/* Floating geometric shapes - more visible */}
         <motion.div
-          className="absolute w-20 h-20 border border-primary/10 rounded-xl"
-          style={{ top: "20%", left: "15%" }}
+          className="absolute w-24 h-24 border-2 border-primary/20 rounded-2xl"
+          style={{ top: "18%", left: "12%" }}
           animate={{ rotate: 360, scale: [1, 1.1, 1] }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute w-14 h-14 border border-accent/10 rounded-lg"
-          style={{ top: "60%", right: "20%" }}
+          className="absolute w-16 h-16 border-2 border-accent/20 rounded-xl"
+          style={{ top: "65%", right: "15%" }}
           animate={{ rotate: -360, scale: [1, 1.15, 1] }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute w-24 h-24 border border-primary/[0.07]"
-          style={{ bottom: "25%", left: "30%", borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%" }}
-          animate={{ rotate: 180, borderRadius: ["30% 70% 70% 30% / 30% 30% 70% 70%", "70% 30% 30% 70% / 70% 70% 30% 30%", "30% 70% 70% 30% / 30% 30% 70% 70%"] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute w-32 h-32 border-2 border-primary/15 rounded-full"
+          style={{ bottom: "20%", left: "8%" }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute w-3 h-3 rounded-full bg-primary/20"
-          style={{ top: "35%", right: "35%" }}
-          animate={{ scale: [1, 1.8, 1], opacity: [0.2, 0.5, 0.2] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute w-2 h-2 rounded-full bg-accent/20"
-          style={{ top: "70%", left: "45%" }}
-          animate={{ scale: [1, 2, 1], opacity: [0.15, 0.4, 0.15] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+          className="absolute w-20 h-20 border-2 border-accent/15"
+          style={{ top: "12%", right: "25%", borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%" }}
+          animate={{
+            rotate: 180,
+            borderRadius: [
+              "30% 70% 70% 30% / 30% 30% 70% 70%",
+              "70% 30% 30% 70% / 70% 70% 30% 30%",
+              "30% 70% 70% 30% / 30% 30% 70% 70%",
+            ],
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
