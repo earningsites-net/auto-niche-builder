@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Lightbulb, Smartphone, TrendingUp, Award } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 const reasons = [
   {
@@ -24,10 +25,68 @@ const reasons = [
   },
 ];
 
+const DotPattern = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationId: number;
+    const dots: { x: number; y: number; baseAlpha: number; phase: number }[] = [];
+    const spacing = 32;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2;
+      canvas.height = canvas.offsetHeight * 2;
+      ctx.scale(2, 2);
+      dots.length = 0;
+      for (let x = 0; x < canvas.offsetWidth; x += spacing) {
+        for (let y = 0; y < canvas.offsetHeight; y += spacing) {
+          dots.push({ x, y, baseAlpha: 0.08 + Math.random() * 0.1, phase: Math.random() * Math.PI * 2 });
+        }
+      }
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    const animate = (time: number) => {
+      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      dots.forEach((dot) => {
+        const alpha = dot.baseAlpha + Math.sin(time * 0.001 + dot.phase) * 0.06;
+        const radius = 1.2 + Math.sin(time * 0.0015 + dot.phase) * 0.4;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(226, 100%, 58%, ${alpha})`;
+        ctx.fill();
+      });
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animationId = requestAnimationFrame(animate);
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ opacity: 0.7 }}
+    />
+  );
+};
+
 const WhyUsSection = () => {
   return (
-    <section className="py-28 relative">
-      <div className="container mx-auto px-6">
+    <section className="py-28 relative overflow-hidden">
+      <DotPattern />
+      <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -60,12 +119,13 @@ const WhyUsSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
-                className="bg-card rounded-2xl p-6 border border-border/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+                whileHover={{ y: -6, scale: 1.03 }}
+                className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 border border-border/50 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 cursor-default group"
               >
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                  <r.icon className="w-5 h-5 text-primary" />
+                <div className="w-10 h-10 rounded-xl bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center mb-4 transition-colors duration-300">
+                  <r.icon className="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h4 className="font-semibold text-sm mb-2 text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
+                <h4 className="font-semibold text-sm mb-2 text-foreground group-hover:text-primary transition-colors duration-300" style={{ fontFamily: "var(--font-heading)" }}>
                   {r.title}
                 </h4>
                 <p className="text-muted-foreground text-sm leading-relaxed">{r.description}</p>
