@@ -1,6 +1,11 @@
 import { motion } from "framer-motion";
 import { Globe, ShoppingCart, Smartphone } from "lucide-react";
 
+const iconDrawVariants = {
+  hidden: { pathLength: 0, opacity: 0 },
+  visible: { pathLength: 1, opacity: 1, transition: { duration: 0.6, ease: "easeInOut" } },
+};
+
 const services = [
   {
     icon: Globe,
@@ -18,6 +23,27 @@ const services = [
     description: "Web apps and custom digital solutions to automate and grow your business.",
   },
 ];
+
+const AnimatedIcon = ({ icon: Icon }: { icon: typeof Globe }) => (
+  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/15 transition-colors relative overflow-hidden">
+    <div className="opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+      <Icon className="w-6 h-6 text-primary" />
+    </div>
+    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <motion.div
+        initial="hidden"
+        whileInView="hidden"
+        className="w-6 h-6 text-primary group-hover:animate-none"
+      >
+        <Icon className="w-6 h-6 text-primary [&>*]:stroke-primary [&>*]:transition-all [&>*]:duration-700 [&>*]:ease-out group-hover:[stroke-dasharray:100] group-hover:[stroke-dashoffset:0]" 
+          style={{
+            animation: "none",
+          }}
+        />
+      </motion.div>
+    </div>
+  </div>
+);
 
 const ServicesSection = () => {
   return (
@@ -44,17 +70,35 @@ const ServicesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="bg-card rounded-2xl p-8 border border-border/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-500 group"
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="bg-card rounded-2xl p-8 border border-border/50 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/20 transition-all duration-500 group cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/15 transition-colors">
-                <service.icon className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/15 group-hover:scale-110 transition-all duration-500">
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  whileInView={{ scale: 1, rotate: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.15 + 0.3 }}
+                  className="group-hover:scale-0 transition-transform duration-300"
+                >
+                  <service.icon className="w-6 h-6 text-primary" />
+                </motion.div>
+                <motion.div
+                  className="absolute"
+                  initial={{ scale: 0, rotate: 180 }}
+                  whileHover={{ scale: 1, rotate: 0 }}
+                >
+                  <service.icon className="w-6 h-6 text-primary" />
+                </motion.div>
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
-                {service.title}
-              </h3>
-              <p className="text-muted-foreground leading-relaxed text-sm">
-                {service.description}
-              </p>
+              <div className="overflow-hidden">
+                <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors duration-300" style={{ fontFamily: "var(--font-heading)" }}>
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed text-sm">
+                  {service.description}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>
