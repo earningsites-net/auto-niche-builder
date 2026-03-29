@@ -85,6 +85,10 @@ const DotPattern = () => {
 const WhyUsSection = () => {
   return (
     <section className="py-28 relative overflow-hidden">
+      {/* Top gradient fade */}
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent z-[1]" />
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-background/60 to-transparent z-[1]" />
       <DotPattern />
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
