@@ -78,7 +78,7 @@ const ServicesSection = () => {
                   initial={{ scale: 0, rotate: -180 }}
                   whileInView={{ scale: 1, rotate: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15 + 0.3 }}
+                  transition={{ duration: 1.2, delay: i * 0.2 + 0.4, ease: "easeOut" }}
                   className="group-hover:scale-0 transition-transform duration-300"
                 >
                   <service.icon className="w-6 h-6 text-primary" />
