@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Sparkles, RefreshCw, TrendingUp } from "lucide-react";
 import autoblogImg from "@/assets/autoblog-feature.png";
