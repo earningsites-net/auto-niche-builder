@@ -54,13 +54,22 @@ const DotPattern = () => {
     window.addEventListener("resize", resize);
 
     const animate = (time: number) => {
-      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      const h = canvas.offsetHeight;
+      ctx.clearRect(0, 0, canvas.offsetWidth, h);
       dots.forEach((dot) => {
         const alpha = dot.baseAlpha + Math.sin(time * 0.001 + dot.phase) * 0.06;
         const radius = 1.2 + Math.sin(time * 0.0015 + dot.phase) * 0.4;
+        const progress = dot.y / h; // 0 at top, 1 at bottom
+        // Interpolate hue from blue (226) to violet (270) toward bottom
+        const hue = 226 + progress * 44;
+        // Increase saturation and lightness shift toward bottom
+        const sat = 100;
+        const light = 58 + progress * 8;
+        // Increase alpha toward bottom for a more vivid transition
+        const finalAlpha = alpha + progress * 0.12;
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(226, 100%, 58%, ${alpha})`;
+        ctx.fillStyle = `hsla(${hue}, ${sat}%, ${light}%, ${finalAlpha})`;
         ctx.fill();
       });
       animationId = requestAnimationFrame(animate);
