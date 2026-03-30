@@ -21,11 +21,74 @@ const features = [
   },
 ];
 
+const WhiteDotPattern = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationId: number;
+    const dots: { x: number; y: number; baseAlpha: number; phase: number }[] = [];
+    const spacing = 32;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2;
+      canvas.height = canvas.offsetHeight * 2;
+      ctx.scale(2, 2);
+      dots.length = 0;
+      for (let x = 0; x < canvas.offsetWidth; x += spacing) {
+        for (let y = 0; y < canvas.offsetHeight; y += spacing) {
+          dots.push({ x, y, baseAlpha: 0.06 + Math.random() * 0.08, phase: Math.random() * Math.PI * 2 });
+        }
+      }
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    const animate = (time: number) => {
+      const h = canvas.offsetHeight;
+      ctx.clearRect(0, 0, canvas.offsetWidth, h);
+      dots.forEach((dot) => {
+        const alpha = dot.baseAlpha + Math.sin(time * 0.001 + dot.phase) * 0.04;
+        const radius = 1.2 + Math.sin(time * 0.0015 + dot.phase) * 0.3;
+        // Fade out as we go down (only visible in top ~40%)
+        const fadeOut = Math.max(0, 1 - dot.y / (h * 0.4));
+        const finalAlpha = alpha * fadeOut;
+        if (finalAlpha < 0.005) return;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(0, 0%, 100%, ${finalAlpha})`;
+        ctx.fill();
+      });
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animationId = requestAnimationFrame(animate);
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
+      style={{ opacity: 0.7 }}
+    />
+  );
+};
+
 const AutoBlogSection = () => {
   return (
     <section id="autoblog" className="py-28 relative">
       {/* Brand gradient background */}
       <div className="absolute inset-0 brand-gradient" />
+      <WhiteDotPattern />
       {/* Subtle overlay pattern */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
