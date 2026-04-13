@@ -133,7 +133,7 @@ const AutoBlogSection = () => {
               asChild
               className="bg-white text-primary hover:bg-white/90 font-semibold tracking-wide shadow-lg"
             >
-              <a href="#contact">Discover AutoBlog</a>
+              <a href="https://aiblogs.earningsites.net/portal" target="_blank" rel="noopener noreferrer">Site Owner Portal</a>
             </Button>
           </motion.div>
 

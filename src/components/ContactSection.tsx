@@ -87,9 +87,6 @@ const ContactSection = () => {
                 </a>
               </Button>
 
-              <p className="text-white/40 text-xs text-center mt-4">
-                Free consultation · No strings attached
-              </p>
             </motion.div>
           </div>
         </div>
