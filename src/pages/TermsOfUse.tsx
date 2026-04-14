@@ -141,7 +141,7 @@ const TermsOfUse = () => {
           </Section>
         </div>
       </main>
-      <ContactSection hideContact />
+      <ContactSection />
     </div>
   );
 };
