@@ -6,7 +6,7 @@ const ContactSection = ({ hideContact = false }: { hideContact?: boolean }) => {
   return (
     <section id="contact" className={hideContact ? "pb-0" : "pt-28 pb-0"}>
       <div className="brand-gradient pt-20 pb-16">
-        {!hideContact && <div className="container mx-auto px-6">
+        {!hideContact && (<div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto items-start">
             {/* Left column - Info */}
             <motion.div
@@ -89,10 +89,10 @@ const ContactSection = ({ hideContact = false }: { hideContact?: boolean }) => {
 
             </motion.div>
           </div>
-        </div>}
+        </div>)}
 
         {/* Footer integrated */}
-        <div className="container mx-auto px-6 mt-16 pt-8 border-t border-white/10">
+        <div className={`container mx-auto px-6 pt-8 border-t border-white/10 ${hideContact ? 'mt-0' : 'mt-16'}`}>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/50 pb-8">
             <p>© {new Date().getFullYear()} EarningSites.net — All rights reserved</p>
             <a href="/terms" className="hover:text-white/70 transition-colors">Terms of Use</a>
