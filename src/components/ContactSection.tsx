@@ -89,13 +89,13 @@ const ContactSection = ({ hideContact = false }: { hideContact?: boolean }) => {
 
             </motion.div>
           </div>
-        </div>
+        </div>}
 
         {/* Footer integrated */}
         <div className="container mx-auto px-6 mt-16 pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/50 pb-8">
             <p>© {new Date().getFullYear()} EarningSites.net — All rights reserved</p>
-            <p>15+ years of digital experience</p>
+            <a href="/terms" className="hover:text-white/70 transition-colors">Terms of Use</a>
           </div>
         </div>
       </div>
