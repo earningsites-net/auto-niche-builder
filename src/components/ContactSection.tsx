@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 import { Mail, ArrowUpRight, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const ContactSection = () => {
+const ContactSection = ({ hideContact = false }: { hideContact?: boolean }) => {
   return (
-    <section id="contact" className="pt-28 pb-0">
+    <section id="contact" className={hideContact ? "pb-0" : "pt-28 pb-0"}>
       <div className="brand-gradient pt-20 pb-16">
-        <div className="container mx-auto px-6">
+        {!hideContact && <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto items-start">
             {/* Left column - Info */}
             <motion.div
